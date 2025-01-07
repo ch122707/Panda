@@ -1,0 +1,326 @@
+apply plugin: "com.android.application"
+apply plugin: "kotlin-android"
+
+repositories {
+    maven {
+        url 'https://www.jitpack.io'
+        content {
+            includeModule 'com.github.UnifiedPush', 'android-connector'
+        }
+    }
+}
+
+def verName = APP_VERSION_NAME
+def verCode = 1201
+
+def officialVer = APP_VERSION_NAME
+def officialCode = APP_VERSION_CODE
+
+configurations {
+    compile.exclude module: "support-v4"
+}
+
+def keystorePwd = null
+def alias = null
+def pwd = null
+def disableCMakeRelWithDebInfo = System.getenv("COMPILE_NATIVE") == null
+
+Properties properties
+def base64 = System.getenv("LOCAL_PROPERTIES")
+if (base64 != null && !base64.isBlank()) {
+    properties = new Properties()
+    properties.load(new ByteArrayInputStream(Base64.decoder.decode(base64)))
+} else if (project.rootProject.file("local.properties").exists()) {
+    properties = new Properties()
+    properties.load(project.rootProject.file("local.properties").newDataInputStream())
+}
+
+if (properties != null) {
+    keystorePwd = properties.getProperty("KEYSTORE_PASS")
+    alias = properties.getProperty("ALIAS_NAME")
+    pwd = properties.getProperty("ALIAS_PASS")
+}
+
+keystorePwd = keystorePwd ?: System.getenv("KEYSTORE_PASS")
+alias = alias ?: System.getenv("ALIAS_NAME")
+pwd = pwd ?: System.getenv("ALIAS_PASS")
+
+def targetTask = ""
+if (!gradle.startParameter.taskNames.isEmpty()) {
+    if (gradle.startParameter.taskNames.size == 1) {
+        targetTask = gradle.startParameter.taskNames[0].toLowerCase()
+    }
+}
+
+def nativeTarget = System.getenv("NATIVE_TARGET")
+if (nativeTarget == null) nativeTarget = ""
+
+android {
+    compileSdkVersion 34
+    ndkVersion rootProject.ext.ndkVersion
+
+    defaultConfig.applicationId = "Panda.love"
+
+    splits {
+        abi {
+            if (targetTask.contains("fdroid")) {
+                enable false
+                universalApk true
+            } else {
+                enable true
+                reset()
+                universalApk false
+                if (!nativeTarget.isBlank()) {
+                    include nativeTarget
+                } else {
+                    include 'arm64-v8a'
+                }
+            }
+        }
+    }
+
+    defaultConfig {
+        minSdkVersion 21
+        //noinspection ExpiredTargetSdkVersion,OldTargetApi
+        targetSdkVersion 34
+
+        versionName verName
+        versionCode verCode
+
+        //obtain your own keys at https://core.telegram.org/api/obtaining_api_id
+        def appId = "6"
+        def appHash = "eb06d4abfb49dc3eeb1aeb98ae0f581e"
+
+        if (properties != null) {
+            appId = properties.getProperty("TELEGRAM_APP_ID") ?: System.getenv("TELEGRAM_APP_ID") ?: appId
+            appHash = properties.getProperty("TELEGRAM_APP_HASH") ?: System.getenv("TELEGRAM_APP_HASH") ?: appHash
+        }
+
+        buildConfigField "String", "BUILD_VERSION_STRING", "\"" + verName + "\""
+        buildConfigField "String", "OFFICIAL_VERSION", "\"" + officialVer + "\""
+        buildConfigField "int", "OFFICIAL_VERSION_CODE", officialCode + ""
+        buildConfigField "int", "APP_ID", appId
+        buildConfigField "String", "APP_HASH", "\"" + appHash + "\""
+
+        resValue 'string', 'DEEPL_API_KEY', (System.getenv("DEEPL_API_KEY") ?: "")
+
+        externalNativeBuild {
+            cmake {
+                arguments "-DANDROID_STL=c++_static", "-DANDROID_PLATFORM=android-21"
+            }
+        }
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments += ["room.schemaLocation": "$projectDir/schemas".toString()]
+            }
+        }
+    }
+
+    bundle {
+        language {
+            enableSplit = false
+        }
+    }
+
+    externalNativeBuild {
+        cmake {
+            path "jni/CMakeLists.txt"
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+
+        coreLibraryDesugaringEnabled true
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_11.toString()
+    }
+
+    testOptions {
+        unitTests.includeAndroidResources = true
+    }
+
+    signingConfigs {
+        release {
+            storeFile project.file("release.keystore")
+            storePassword keystorePwd
+            keyAlias alias
+            keyPassword pwd
+        }
+    }
+
+    buildTypes {
+        debug {
+            isDefault true
+            debuggable true
+            jniDebuggable true
+            multiDexEnabled true
+            zipAlignEnabled true
+            signingConfig signingConfigs.release
+        }
+
+        staging {
+            debuggable false
+            jniDebuggable false
+            minifyEnabled true
+            shrinkResources true
+            multiDexEnabled true
+            zipAlignEnabled true
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+            matchingFallbacks = ["release", "staging", "debug"]
+            signingConfig signingConfigs.release
+        }
+
+        release {
+            debuggable false
+            jniDebuggable false
+            minifyEnabled true
+            shrinkResources true
+            multiDexEnabled true
+            zipAlignEnabled true
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+            matchingFallbacks = ["release", "staging", "debug"]
+            signingConfig signingConfigs.release
+        }
+    }
+
+    sourceSets {
+        main {
+            assets.srcDirs = ["src/main/assets"]
+        }
+
+        debug {
+            java {
+                srcDirs "src/main/java"
+            }
+            jniLibs {
+                srcDir "src/main/libs"
+            }
+        }
+
+        staging {
+            java {
+                srcDirs "src/main/java"
+            }
+            jniLibs {
+                srcDir "src/main/libs"
+            }
+        }
+
+        release {
+            java {
+                srcDirs "src/main/java"
+            }
+            jniLibs {
+                srcDir "src/main/libs"
+            }
+        }
+    }
+
+    flavorDimensions "version"
+
+    tasks.configureEach { task ->
+        if (((task.name.endsWith("Ndk") || task.name.startsWith("generateJsonModel") || task.name.startsWith("externalNativeBuild"))) && !task.name.contains("Debug")) {
+            task.enabled = false
+        }
+        if (disableCMakeRelWithDebInfo && task.name.contains("CMakeRelWithDebInfo")) {
+            enabled = false
+        }
+        if (task.name.contains("uploadCrashlyticsMappingFile")) {
+            enabled = false
+        }
+    }
+
+    applicationVariants.configureEach { variant ->
+        variant.outputs.configureEach { output ->
+            String gramName = "NagramX"
+            String first = String.format("%s-v%s(%s)", gramName, versionName, versionCode)
+            String name = outputFileName.replace("TMessagesProj", first)
+            name = name.replace("-release", "")
+            name = name.replace("-staging", "")
+            outputFileName = name
+        }
+    }
+}
+
+dependencies {
+    // official
+    implementation 'androidx.fragment:fragment:1.2.0'
+    implementation "androidx.core:core-ktx:1.9.0" // androidx.core:core:1.10.1
+    implementation "androidx.palette:palette-ktx:1.0.0"
+    implementation "androidx.exifinterface:exifinterface:1.3.6"
+    implementation "androidx.dynamicanimation:dynamicanimation:1.0.0"
+    implementation "androidx.multidex:multidex:2.0.1"
+    implementation "androidx.sharetarget:sharetarget:1.2.0"
+    implementation "androidx.interpolator:interpolator:1.0.0"
+    implementation 'androidx.biometric:biometric:1.1.0'
+    compileOnly 'org.checkerframework:checker-qual:2.5.2'
+    compileOnly 'org.checkerframework:checker-compat-qual:2.5.0'
+    implementation "com.google.firebase:firebase-messaging:23.4.1" // 22.0.0
+    implementation "com.google.firebase:firebase-crashlytics:18.6.2"
+    implementation 'com.google.android.gms:play-services-maps:18.1.0'
+    implementation 'com.google.android.gms:play-services-vision:20.1.3'
+    implementation 'com.google.android.gms:play-services-location:21.0.1'
+    implementation "com.googlecode.mp4parser:isoparser:1.0.6"
+    implementation 'com.google.mlkit:language-id:17.0.6' // 16.1.1 // Na: add for auto translate
+    implementation "com.google.code.gson:gson:2.11.0"
+    implementation 'com.google.guava:guava:31.1-android'
+    implementation 'com.google.android.gms:play-services-mlkit-subject-segmentation:16.0.0-beta1'
+    implementation 'com.google.android.gms:play-services-mlkit-image-labeling:16.0.8'
+    coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:2.1.2" // 1.1.5
+
+    // Nagram
+    implementation "androidx.browser:browser:1.5.0"
+    implementation "androidx.viewpager:viewpager:1.0.0"
+    // kotlin
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.9.23"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.8.0"
+    // utilities 
+    implementation "com.jakewharton:process-phoenix:2.1.2"
+    implementation "org.dizitart:nitrite:3.4.3"
+    implementation "org.osmdroid:osmdroid-android:6.1.10"
+    // network
+    implementation "com.squareup.okhttp3:okhttp:5.0.0-alpha.10"
+    implementation 'com.neovisionaries:nv-websocket-client:2.14'
+    implementation 'dnsjava:dnsjava:3.4.1'
+    implementation "cn.hutool:hutool-core:5.7.13"
+    implementation 'cn.hutool:hutool-http:5.7.5'
+    // add for emoji
+    implementation 'com.jaredrummler:truetypeparser-light:1.0.0'
+    // add for UnifiedPush
+    implementation 'com.github.UnifiedPush:android-connector:2.3.1'
+    // NagramX: add for save deleted messages
+    implementation "androidx.room:room-runtime:2.5.2"
+    annotationProcessor "androidx.room:room-compiler:2.5.2"
+
+    compileOnly fileTree("libs")
+}
+
+apply plugin: "com.google.gms.google-services"
+apply plugin: "com.google.firebase.crashlytics"
+
+android {
+    packagingOptions {
+        jniLibs {
+            excludes += ['/fabric/**', '/META-INF/native-image/**']
+            useLegacyPackaging true
+        }
+        resources {
+            excludes += ['/fabric/**', '/META-INF/*.version', '/META-INF/*.kotlin_module', '/META-INF/native-image/**', '/builddef.lst', '/*.txt', '/DebugProbesKt.bin', '/okhttp3/internal/publicsuffix/NOTICE']
+        }
+
+        def lib = "libtmessages.*.so"
+        pickFirst "lib/arm64-v8a/$lib"
+    }
+    namespace "org.telegram.messenger"
+    lint {
+        disable 'MissingTranslation', 'ExtraTranslation', 'BlockedPrivateApi'
+    }
+    buildFeatures {
+        buildConfig true
+    }
+}
