@@ -288,7 +288,7 @@ dependencies {
     implementation 'com.neovisionaries:nv-websocket-client:2.14'
     implementation 'dnsjava:dnsjava:3.4.1'
     implementation "cn.hutool:hutool-core:5.7.13"
-    implementation 'cn.hutool:hutool-http:5.7.5'
+    implementation 'cn.hutool:hutool-http:5.8.35'
     // add for emoji
     implementation 'com.jaredrummler:truetypeparser-light:1.0.0'
     // add for UnifiedPush
