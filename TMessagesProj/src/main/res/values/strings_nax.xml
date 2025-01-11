@@ -39,6 +39,7 @@
     <string name="useTelegramTranslateInChatSubtitle">Only works with the Telegram API.</string>
     <string name="ForwardsRestrictedInfoAyuDeleted">Forwarding is not allowed.</string>
     <string name="RegexFiltersNotice">Tap to edit.</string>
-    <string name="botCommandConfirmTitle">Confirm Command</string>
-    <string name="botCommandConfirmText">Are you sure you want to send this command?\n\n%s</string>
+    <string name="botCommandConfirmTitle">Send Command</string>
+    <string name="botCommandConfirmText">Do you want to send this command?\n\n%s</string>
+    <string name="TranslateMessagesInfo3">The ‘Show Translate Button’ is handled by N-Settings and can\'t be changed here.</string>
 </resources>
