@@ -774,7 +774,7 @@ public class TranslateController extends BaseController {
                     textObj.text = translation;
                     callback.run(message.getId(), textObj, language);
                 }
-                
+
                 @Override
                 public void onFailed(boolean unsupported, @NonNull String error) {
                     AndroidUtilities.runOnUIThread(() -> {
