@@ -294,7 +294,7 @@ dependencies {
     implementation 'com.github.UnifiedPush:android-connector:2.3.1'
     // NagramX: add for save deleted messages
     implementation "androidx.room:room-runtime:2.5.2"
-    annotationProcessor "androidx.room:room-compiler:2.5.2"
+    annotationProcessor "androidx.room:room-compiler:2.6.1"
 
     compileOnly fileTree("libs")
 }
