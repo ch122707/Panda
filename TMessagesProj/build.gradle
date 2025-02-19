@@ -24,7 +24,6 @@ def keystorePwd = null
 def alias = null
 def pwd = null
 def disableCMakeRelWithDebInfo = System.getenv("COMPILE_NATIVE") == null
-def nagramx_build_args = System.getenv("NAGRAMX_BUILD_ARGS") == null ? "" : System.getenv("NAGRAMX_BUILD_ARGS")
 
 Properties properties
 def base64 = System.getenv("LOCAL_PROPERTIES")
@@ -40,7 +39,6 @@ if (properties != null) {
     keystorePwd = properties.getProperty("KEYSTORE_PASS")
     alias = properties.getProperty("ALIAS_NAME")
     pwd = properties.getProperty("ALIAS_PASS")
-    nagramx_build_args = properties.getProperty("NAGRAMX_BUILD_ARGS", nagramx_build_args)
 }
 
 keystorePwd = keystorePwd ?: System.getenv("KEYSTORE_PASS")
@@ -61,7 +59,7 @@ android {
     compileSdkVersion 34
     ndkVersion rootProject.ext.ndkVersion
 
-    defaultConfig.applicationId = "nu.gpu.nagram"
+    defaultConfig.applicationId = "com.pandalove"
 
     splits {
         abi {
@@ -235,14 +233,11 @@ android {
         if (task.name.contains("uploadCrashlyticsMappingFile")) {
             enabled = false
         }
-        if (task.name.contains("buildCMakeDebug") && nagramx_build_args.contains("skip_buildCMakeDebug")) {
-            task.enabled = false
-        }
     }
 
     applicationVariants.configureEach { variant ->
         variant.outputs.configureEach { output ->
-            String gramName = "NagramX"
+            String gramName = "Panda"
             String first = String.format("%s-v%s(%s)", gramName, versionName, versionCode)
             String name = outputFileName.replace("TMessagesProj", first)
             name = name.replace("-release", "")
