@@ -68,7 +68,6 @@
     <string name="HideBotButtonInInputField">入力フィールドのボットボタンを非表示</string>
     <string name="ShowSendAsUnderMessageHint">入力ヒントの下に送信者を表示</string>
     <string name="CheckAllForum">すべてのトピックモードグループを追加</string>
-    <string name="ShowForumAsNormalChat">トピックモードグループを通常のチャットとして開く</string>
     <string name="DecorationNone">なし</string>
     <string name="ChatDecoration">チャットの外観を装飾</string>
     <string name="NeedChangeNekoSettings">この設定はN-設定によって上書きされているため、変更できません</string>
@@ -131,12 +130,11 @@
     <string name="RegexFiltersCaseInsensitive">大文字と小文字を区別しない</string>
     <string name="RegexFiltersAdd">正規表現を追加</string>
     <string name="RegexFiltersEdit">正規表現を編集</string>
-    <string name="RegexFiltersAddDescription">ウェブサイト <![CDATA[<a href="https://regex101.com">regex101.com</a>]]> を使用して、正規表現を完全にテストできます。
-    プレーンテキストを使用することもできますが、括弧をエスケープすることを忘れないでください。</string>
-    <string name="RegexFiltersAddError">正規表現の構文エラー</string>
+    <string name="RegexFiltersAddDescription">ウェブサイト <![CDATA[<a href="https://regex101.com">regex101.com</a>]]> を使用して、正規表現を完全にテストできます。プレーンテキストを使用することもできますが、括弧をエスケープすることを忘れないでください。</string>
+    <string name="RegexFiltersAddError">構文エラー</string>
     <string name="ShowTimeHint">メッセージ時間をクリックして詳細を表示</string>
-    <string name="SearchHashtagDefaultPageChannel">チャンネルでハッシュタグをクリックしたときのデフォルトの検索ページ</string>
-    <string name="SearchHashtagDefaultPageChat">他のチャットでハッシュタグをクリックしたときのデフォルトの検索ページ</string>
+    <string name="SearchHashtagDefaultPageChannel">チャンネルでデフォルトのハッシュタグ検索ページ</string>
+    <string name="SearchHashtagDefaultPageChat">チャットでデフォルトのハッシュタグ検索ページ</string>
     <string name="OpenUrlOutBotWebViewRegex">URL 正規表現で、ボットウェブビューを回避してリンクを開く</string>
     <string name="LocaleToDBC">インターフェーステキストに半角記号を使用</string>
     <string name="EnablePanguOnReceiving">受信時に Pangu を有効にする</string>

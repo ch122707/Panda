@@ -35,7 +35,7 @@
     <string name="AutoInsertGIFCaption">Auto Insert Caption Before Sending GIF</string>
     <string name="DefaultMonoLanguage">Default Code Language</string>
     <string name="DisableGlobalSearch">Disable Global Search</string>
-    <string name="InputMessageId">Input Message ID</string>
+    <string name="InputMessageId">Enter Message ID</string>
     <string name="ToTheMessage">Go to</string>
     <string name="ZalgoFilter">Filter \"Zalgo\" Symbols</string>
     <string name="ZalgoFilterNotice">All \"Z̷͍͌ā̸̜l̸̞̂g̷̝͘o̶̩̓\" symbols in nicknames or messages will be removed.</string>
@@ -69,7 +69,6 @@
     <string name="HideBotButtonInInputField">Hide Bot Button in Input Field</string>
     <string name="ShowSendAsUnderMessageHint">Show Sender Under Message Hint</string>
     <string name="CheckAllForum">Add forum</string>
-    <string name="ShowForumAsNormalChat">Show forum as normal chat</string>
     <string name="DecorationNone">None</string>
     <string name="ChatDecoration">Chat Decoration</string>
     <string name="NeedChangeNekoSettings">You need to change N-Settings</string>
@@ -132,8 +131,7 @@
     <string name="RegexFiltersCaseInsensitive">Case insensitive expressions</string>
     <string name="RegexFiltersAdd">Add filter</string>
     <string name="RegexFiltersEdit">Edit filter</string>
-    <string name="RegexFiltersAddDescription">You can use site <![CDATA[<a href="https://regex101.com">regex101.com</a>]]> to fully test your regular expression.
-    You can also use plain text, but don\'t forget to escape brackets.</string>
+    <string name="RegexFiltersAddDescription">You can use site <![CDATA[<a href="https://regex101.com">regex101.com</a>]]> to fully test your regular expression. You can also use plain text, but don\'t forget to escape brackets.</string>
     <string name="RegexFiltersAddError">Regex syntax error</string>
     <string name="ShowTimeHint">Click Message Time to Show Details</string>
     <string name="SearchHashtagDefaultPageChannel">Default Hashtag Search Page in Channels</string>
