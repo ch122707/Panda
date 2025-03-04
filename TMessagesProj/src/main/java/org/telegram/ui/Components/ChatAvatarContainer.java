@@ -732,12 +732,12 @@ public class ChatAvatarContainer extends FrameLayout implements NotificationCent
         if (timeItem != null) {
             int timeItemLeft = leftPadding + dp(16);
             int timeItemRight = leftPadding + dp(16 + 34);
-            
+
             if (isCentered()) {
                 timeItemLeft = getWidth() - leftPadding - dp(25);
                 timeItemRight = timeItemLeft + dp(34);
             }
-            
+
             timeItem.layout(timeItemLeft, viewTop + dp(15), timeItemRight, viewTop + dp(15 + 34));
         }
         if (starBgItem != null) {

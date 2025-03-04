@@ -9552,7 +9552,7 @@ public class ChatActivityEnterView extends BlurredFrameLayout implements Notific
             if (NaConfig.INSTANCE.getDisableClickCommandToSend().Bool()) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(parentActivity);
                 builder.setTitle(LocaleController.getString(R.string.botCommandConfirmTitle));
-                String message = String.format(LocaleController.getString(R.string.botCommandConfirmText), command); 
+                String message = String.format(LocaleController.getString(R.string.botCommandConfirmText), command);
                 builder.setMessage(message);
                 builder.setPositiveButton(LocaleController.getString(R.string.OK), (dialogInterface, i) -> {
                     sendCommand(command, effectId, messageObject, username, botCount);
