@@ -388,7 +388,7 @@ public class DrawerLayoutAdapter extends RecyclerListView.SelectionAdapter imple
         if (showDivider) {
             items.add(null); // divider
         }
-        if (NaConfig.INSTANCE.getDrawerItemArchivedChats().Bool()) { 
+        if (NaConfig.INSTANCE.getDrawerItemArchivedChats().Bool()) {
             items.add(new Item(nkbtnArchivedChats, LocaleController.getString(R.string.ArchivedChats), archiveIcon));
             items.add(null);
         }

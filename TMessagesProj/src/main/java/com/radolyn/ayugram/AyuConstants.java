@@ -38,5 +38,5 @@ public class AyuConstants {
 
     public static String AYU_DATABASE = "ayu-data";
 
-    public static String APP_NAME = "Nagram";
+    public static String APP_NAME = "Panda";
 }

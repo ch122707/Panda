@@ -737,7 +737,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                 } else if (id == DrawerLayoutAdapter.nkbtnSettings) {
                     presentFragment(new NekoSettingsActivity());
                     drawerLayoutContainer.closeDrawer(false);
-                } else if (id == DrawerLayoutAdapter.nkbtnQrLogin) {  
+                } else if (id == DrawerLayoutAdapter.nkbtnQrLogin) {
                     ActionIntroActivity fragment = new ActionIntroActivity(ActionIntroActivity.ACTION_TYPE_QR_LOGIN);
                     fragment.setQrLoginDelegate(code -> {
                         AlertDialog progressDialog = new AlertDialog(LaunchActivity.this, AlertDialog.ALERT_TYPE_SPINNER);
@@ -770,7 +770,7 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                     args.putInt("folderId", 1);
                     presentFragment(new DialogsActivity(args));
                     drawerLayoutContainer.closeDrawer(false);
-                }  
+                }
             }
         });
         final ItemTouchHelper sideMenuTouchHelper = new ItemTouchHelper(new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0) {
