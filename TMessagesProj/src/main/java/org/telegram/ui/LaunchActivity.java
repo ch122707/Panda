@@ -233,6 +233,7 @@ import java.util.zip.ZipInputStream;
 import cn.hutool.core.util.StrUtil;
 import kotlin.Unit;
 import kotlin.text.StringsKt;
+import tw.nekomimi.nekogram.helpers.AppRestartHelper;
 import tw.nekomimi.nekogram.helpers.SettingsHelper;
 import tw.nekomimi.nekogram.helpers.remote.EmojiHelper;
 import tw.nekomimi.nekogram.helpers.remote.PagePreviewRulesHelper;
@@ -766,6 +767,8 @@ public class LaunchActivity extends BasePermissionsActivity implements INavigati
                     args.putInt("folderId", 1);
                     presentFragment(new DialogsActivity(args));
                     drawerLayoutContainer.closeDrawer(false);
+                } else if (id == DrawerLayoutAdapter.nkbtnRestartApp) {
+                    AppRestartHelper.triggerRebirth(ApplicationLoader.applicationContext, new Intent(ApplicationLoader.applicationContext, LaunchActivity.class));
                 }
             }
         });
